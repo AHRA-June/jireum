@@ -3,6 +3,7 @@ import rulesJson from './rules/jireum-rules.json';
 import { judge } from './engine/judge';
 import type { JireumInput, JireumRules, JireumVerdict } from './engine/types';
 import { logEvent, triggerHaptic } from './toss/bridge';
+import HomeScreen from './screens/HomeScreen';
 import InputScreen from './screens/InputScreen';
 import ReviewingScreen from './screens/ReviewingScreen';
 import VerdictScreen from './screens/VerdictScreen';
@@ -13,12 +14,13 @@ const rules = rulesJson as JireumRules;
 const REVIEWING_MS = 2500;
 
 type Phase =
+  | { name: 'home' }
   | { name: 'input' }
   | { name: 'reviewing' }
   | { name: 'verdict'; input: JireumInput; verdict: JireumVerdict };
 
 export default function App() {
-  const [phase, setPhase] = useState<Phase>({ name: 'input' });
+  const [phase, setPhase] = useState<Phase>({ name: 'home' });
 
   const handleSubmit = useCallback((input: JireumInput) => {
     logEvent('jireum_submit', { price: input.price });
@@ -36,6 +38,8 @@ export default function App() {
   const handleRetry = useCallback(() => setPhase({ name: 'input' }), []);
 
   switch (phase.name) {
+    case 'home':
+      return <HomeScreen onStart={() => setPhase({ name: 'input' })} />;
     case 'input':
       return <InputScreen rules={rules} onSubmit={handleSubmit} />;
     case 'reviewing':
