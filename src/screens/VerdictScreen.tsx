@@ -23,7 +23,7 @@ function stampTone(verdict: JireumVerdict): 'blue' | 'orange' | 'red' | 'gray' {
 
 function buildShareMessage(input: JireumInput, verdict: JireumVerdict): string {
   return [
-    `[지름신 심사기] ${verdict.docNumber}`,
+    `[지름결의서] ${verdict.docNumber}`,
     `신청 품목: ${input.item} (${input.price.toLocaleString('ko-KR')}원)`,
     `판정: ${verdict.stamp} (${verdict.score}점)`,
     verdict.reason,

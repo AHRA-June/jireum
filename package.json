@@ -1,9 +1,9 @@
 {
-  "name": "jireumsin-simsagi",
+  "name": "jireumform",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "지름신 심사기 — 앱인토스 미니앱",
+  "description": "지름결의서 — 앱인토스 미니앱",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build && ait build",

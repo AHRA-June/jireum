@@ -52,7 +52,7 @@ export default function HomeScreen({ onStart }: Props) {
           </span>
         </button>
       </div>
-      <p className={`board__hint${opening ? ' board__hint--hidden' : ''}`}>눌러서 심사 신청</p>
+      <p className={`board__hint${opening ? ' board__hint--hidden' : ''}`}>눌러서 결의서 작성</p>
       <p className="fine-print">본 판정은 법적 효력이 없으며, 지름은 본인 책임입니다.</p>
     </main>
   );

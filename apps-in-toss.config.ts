@@ -1,7 +1,7 @@
 import { defineConfig } from '@apps-in-toss/web-framework/config';
 
 export default defineConfig({
-  appName: 'jireumsin-simsagi',
+  appName: 'jireumform',
   brand: {
     // 심사 서류 톤에 맞춘 청색 도장 컬러
     primaryColor: '#1D4ED8',

@@ -1,4 +1,4 @@
-# 지름신 심사기 (Splurge Review)
+# 지름결의서 (Splurge Review)
 
 사고 싶은 걸 입력하면 대출 심사 판정서 양식으로 **승인 / 조건부 승인 / 부결**이 나오는
 앱인토스(Apps in Toss) 미니앱. 전직 여신심사역이 만든 진짜(같은) 가짜 심사.
@@ -6,7 +6,7 @@
 ## 구조
 
 ```
-apps-in-toss.config.ts      # 앱인토스 설정 (appName: jireumsin-simsagi)
+apps-in-toss.config.ts      # 앱인토스 설정 (appName: jireumform)
 src/
   rules/jireum-rules.json   # 배점표 + 판정 문구 풀 (모든 점수·문구의 단일 출처)
   engine/                   # 판정 엔진 (순수 함수, UI 무관)
