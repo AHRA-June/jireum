@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { triggerHaptic } from '../toss/bridge';
+import { loadSigner } from '../signer';
 
 interface Props {
   onStart: () => void;
@@ -11,6 +12,8 @@ const OPEN_MS = 600;
 /** 홈 화면 — 사무실의 그 검정 결재판. 열면(탭하면) 신청서가 나온다. */
 export default function HomeScreen({ onStart }: Props) {
   const [opening, setOpening] = useState(false);
+  // 판정서에서 한 번 서명했다면 결재판 명찰에도 이름이 채워진다
+  const signer = loadSigner();
   const startedRef = useRef(false);
 
   const handleOpen = () => {
@@ -43,11 +46,15 @@ export default function HomeScreen({ onStart }: Props) {
           <span className="board__label" aria-hidden="true">
             <span className="board__label-row">
               <span className="board__label-key">Team:</span>
-              <span className="board__label-value">지름 심사 위원회</span>
+              <span className="board__label-value">자금집행팀</span>
             </span>
             <span className="board__label-row">
               <span className="board__label-key">Name:</span>
+              {signer ? (
+              <span className="board__label-value board__label-value--signed">{signer}</span>
+            ) : (
               <span className="board__label-value board__label-value--blank" />
+            )}
             </span>
           </span>
         </button>

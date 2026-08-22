@@ -3,30 +3,13 @@ import type { JireumInput, JireumRules, JireumVerdict } from '../engine/types';
 import { logEvent, saveVerdictImage, shareVerdict, shareVerdictImage } from '../toss/bridge';
 import { renderVerdictImage } from '../share/verdictImage';
 import SignModal from '../components/SignModal';
+import { loadSigner, storeSigner } from '../signer';
 
 interface Props {
   rules: JireumRules;
   input: JireumInput;
   verdict: JireumVerdict;
   onRetry: () => void;
-}
-
-const SIGNER_KEY = 'jireum_signer';
-
-function loadSigner(): string | null {
-  try {
-    return localStorage.getItem(SIGNER_KEY);
-  } catch {
-    return null;
-  }
-}
-
-function storeSigner(name: string | null): void {
-  try {
-    if (name) localStorage.setItem(SIGNER_KEY, name);
-  } catch {
-    // 저장 불가 환경 — 무시
-  }
 }
 
 /** 도장 색: 승인=청색 / 조건부=주황 / 부결=적색, 특수 판정은 규칙별 지정 */
