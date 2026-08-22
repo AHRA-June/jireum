@@ -819,3 +819,126 @@ body {
     text-indent: 0.35em;
   }
 }
+
+/* 담당 칸: 필기체 이름 서명 (글자 수에 따라 크기는 인라인으로 조절) */
+.approval__name {
+  font-family: 'Nanum Pen Script', cursive;
+  color: #23305e;
+  transform: rotate(-8deg);
+  white-space: nowrap;
+}
+
+/* ── 서명 모달 ── */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(38, 34, 27, 0.45);
+}
+
+.modal__sheet {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  background: var(--sheet);
+  border: 1.5px solid var(--ink);
+  box-shadow:
+    inset 0 0 0 3px var(--sheet),
+    inset 0 0 0 4px rgba(38, 34, 27, 0.55),
+    0 18px 40px -18px rgba(38, 34, 27, 0.6);
+  padding: 24px 20px 20px;
+  text-align: center;
+  animation: sheet-in 0.25s ease-out both;
+}
+
+.modal__title {
+  margin: 0 0 6px;
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 19px;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+}
+
+.modal__desc {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  word-break: keep-all;
+}
+
+.modal__input {
+  width: 100%;
+  font-size: 16px;
+  text-align: center;
+  padding: 10px 4px;
+  border: 0;
+  border-bottom: 1.5px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  outline: none;
+}
+
+.modal__input:focus {
+  border-bottom-color: var(--navy);
+}
+
+/* 서명 미리보기: 입력한 이름이 필기체로 보인다 */
+.modal__preview {
+  margin: 14px 0 0;
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 34px;
+  color: #23305e;
+  transform: rotate(-4deg);
+}
+
+.modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.modal__actions .submit {
+  padding: 12px;
+  font-size: 14px;
+}
+
+.modal__close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 6px;
+}
+
+/* ── 토스트 ── */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(28px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 30;
+  margin: 0;
+  padding: 11px 18px;
+  background: rgba(38, 34, 27, 0.92);
+  color: #fdfcf8;
+  font-size: 13px;
+  border-radius: 8px;
+  white-space: nowrap;
+  animation: toast-in 0.25s ease-out both;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

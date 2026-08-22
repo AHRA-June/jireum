@@ -39,3 +39,42 @@ export function logEvent(name: string, params: Record<string, string | number> =
     // 미지원 환경 — 무시
   }
 }
+
+/** 판정서 PNG를 앨범(기기)에 저장한다. 토스 밖에서는 다운로드로 폴백. */
+export async function saveVerdictImage(dataUrl: string, fileName: string): Promise<boolean> {
+  const base64 = dataUrl.split(',')[1];
+  try {
+    const { File } = await import('@apps-in-toss/web-framework');
+    if (File.saveBase64.isSupported()) {
+      await File.saveBase64({ data: base64, fileName, mimeType: 'image/png' });
+      return true;
+    }
+  } catch {
+    // 브릿지 없음 — 아래 브라우저 폴백으로
+  }
+  try {
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = fileName;
+    a.click();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** 판정서 이미지를 시스템 공유 시트로 공유한다. 파일 공유가 안 되면 false. */
+export async function shareVerdictImage(dataUrl: string, text: string): Promise<boolean> {
+  try {
+    const blob = await (await fetch(dataUrl)).blob();
+    const file = new window.File([blob], 'jireum-verdict.png', { type: 'image/png' });
+    if (navigator.canShare?.({ files: [file] })) {
+      await navigator.share({ files: [file], text });
+      return true;
+    }
+  } catch (e) {
+    // 사용자가 공유 시트를 닫은 경우도 여기로 온다 — 성공으로 취급
+    if (e instanceof DOMException && e.name === 'AbortError') return true;
+  }
+  return false;
+}
