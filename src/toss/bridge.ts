@@ -5,7 +5,7 @@
  */
 import { Analytics, Device, Share } from '@apps-in-toss/web-framework';
 
-export async function triggerHaptic(type: 'softMedium' | 'success' | 'error'): Promise<void> {
+export async function triggerHaptic(type: 'tap' | 'softMedium' | 'success' | 'error'): Promise<void> {
   try {
     await Device.triggerHaptic?.({ type });
   } catch {
