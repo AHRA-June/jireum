@@ -780,3 +780,20 @@ body {
     animation-delay: 0s !important;
   }
 }
+
+/* 좁은 화면: 서류 제목이 한 줄을 유지하도록 */
+@media (max-width: 360px) {
+  .doc-header__title,
+  .doc__title {
+    font-size: 21px;
+    letter-spacing: 0.18em;
+    text-indent: 0.18em;
+    white-space: nowrap;
+  }
+
+  .doc-header__office,
+  .doc__office {
+    letter-spacing: 0.35em;
+    text-indent: 0.35em;
+  }
+}
