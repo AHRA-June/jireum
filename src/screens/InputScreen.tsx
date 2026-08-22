@@ -35,16 +35,19 @@ export default function InputScreen({ rules, onSubmit }: Props) {
 
   return (
     <main className="screen">
-      <header className="doc-header">
-        <p className="doc-header__office">지름 심사 위원회</p>
-        <h1 className="doc-header__title">지름 심사 신청서</h1>
-        <p className="doc-header__subtitle">
-          대출 심사 모형(CSS)을 만들던 사람이 이제 당신의 지름을 심사합니다.
-        </p>
-      </header>
+      <article className="sheet">
+        <p className="form-no">■ 지름심사규칙 [별지 제1호 서식]</p>
+        <header className="doc-header">
+          <p className="doc-header__office">지름 심사 위원회</p>
+          <h1 className="doc-header__title">지름 심사 신청서</h1>
+          <hr className="doc-header__rule" />
+          <p className="doc-header__subtitle">
+            대출 심사 모형(CSS)을 만들던 사람이 이제 당신의 지름을 심사합니다.
+          </p>
+        </header>
 
-      <form
-        className="form"
+        <form
+          className="form"
         onSubmit={(e) => {
           e.preventDefault();
           if (!ready) return;
@@ -107,7 +110,8 @@ export default function InputScreen({ rules, onSubmit }: Props) {
           심사 신청
         </button>
         <p className="fine-print">{rules.meta.disclaimer}</p>
-      </form>
+        </form>
+      </article>
     </main>
   );
 }

@@ -38,7 +38,23 @@ export default function VerdictScreen({ rules, input, verdict, onRetry }: Props)
 
   return (
     <main className="screen">
-      <article className={`doc doc--${tone}`}>
+      <article className={`sheet doc doc--${tone}`}>
+        <div className="approval" aria-hidden="true">
+          <div className="approval__table">
+            <div className="approval__cell">
+              <span className="approval__role">담당</span>
+              <span className="approval__sign approval__sign--seal">審</span>
+            </div>
+            <div className="approval__cell">
+              <span className="approval__role">심사역</span>
+              <span className="approval__sign approval__sign--seal">畢</span>
+            </div>
+            <div className="approval__cell">
+              <span className="approval__role">지름신</span>
+              <span className="approval__sign">－</span>
+            </div>
+          </div>
+        </div>
         <header className="doc__head">
           <p className="doc__office">지름 심사 위원회</p>
           <h1 className="doc__title">지름 심사 판정서</h1>
