@@ -43,11 +43,13 @@ export default function VerdictScreen({ rules, input, verdict, onRetry }: Props)
           <div className="approval__table">
             <div className="approval__cell">
               <span className="approval__role">담당</span>
-              <span className="approval__sign approval__sign--seal">審</span>
+              <span className="approval__sign approval__sign--pen">AI</span>
             </div>
             <div className="approval__cell">
               <span className="approval__role">심사역</span>
-              <span className="approval__sign approval__sign--seal">畢</span>
+              <span className="approval__sign">
+                <span className="approval__dojang">심</span>
+              </span>
             </div>
             <div className="approval__cell">
               <span className="approval__role">지름신</span>

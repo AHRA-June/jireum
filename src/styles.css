@@ -355,16 +355,16 @@ body {
 
 /* 배경 워터마크 */
 .doc::after {
-  content: '審査畢';
+  content: '심사필';
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-18deg);
   font-family: var(--serif);
   font-weight: 900;
-  font-size: 96px;
-  letter-spacing: 0.1em;
-  color: rgba(38, 34, 27, 0.045);
+  font-size: 88px;
+  letter-spacing: 0.14em;
+  color: rgba(38, 34, 27, 0.05);
   pointer-events: none;
   white-space: nowrap;
 }
@@ -412,10 +412,34 @@ body {
   font-size: 13px;
 }
 
-.approval__sign--seal {
+/* 담당: 급하게 갈긴 볼펜 사인 */
+.approval__sign--pen {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 23px;
+  font-weight: 400;
+  color: #23305e;
+  transform: rotate(-14deg) translateY(-1px);
+  letter-spacing: -0.04em;
+}
+
+/* 심사역: 빨간 막도장 (원형 인장) */
+.approval__dojang {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid var(--red);
+  border-radius: 50%;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 13px;
   color: var(--red);
-  transform: rotate(-12deg);
-  font-size: 12px;
+  transform: rotate(8deg);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+  box-shadow: inset 0 0 1.5px var(--red);
+  text-shadow: 0.3px 0.3px 0 var(--red);
 }
 
 .doc__head {
