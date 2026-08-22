@@ -79,7 +79,7 @@
     { "condition": "price>500000", "note": "참고: 고액 건은 심사역이 두 번 쳐다보았습니다." }
   ],
   "meta": {
-    "signature": "담당: AI 심사역 (심사 모형 개발자 감수)",
+    "signature": "심사: AI 심사역 (심사 모형 개발자 감수)",
     "disclaimer": "본 판정은 법적 효력이 없으며, 지름은 본인 책임입니다.",
     "docNumberFormat": "제2026-지름-{random4}호"
   }

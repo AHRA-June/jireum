@@ -43,7 +43,19 @@ export default function VerdictScreen({ rules, input, verdict, onRetry }: Props)
           <div className="approval__table">
             <div className="approval__cell">
               <span className="approval__role">담당</span>
-              <span className="approval__sign approval__sign--pen">AI</span>
+              <span className="approval__sign">
+                {/* 신청인 본인의 급한 사인 — 원래 사인은 알아볼 수 없는 법 */}
+                <svg className="approval__scribble" viewBox="0 0 44 22" aria-hidden="true">
+                  <path
+                    d="M3 15 C6 4, 9 3, 10 9 C11 15, 13 16, 15 8 C17 2, 19 4, 20 10 C21 16, 24 14, 27 7 C29 3, 31 5, 31 9 C31 13, 34 13, 38 9 M6 18 C16 21, 30 20, 41 15"
+                    fill="none"
+                    stroke="#23305e"
+                    strokeWidth="1.7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
             </div>
             <div className="approval__cell">
               <span className="approval__role">심사역</span>

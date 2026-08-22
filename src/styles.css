@@ -412,14 +412,12 @@ body {
   font-size: 13px;
 }
 
-/* 담당: 급하게 갈긴 볼펜 사인 */
-.approval__sign--pen {
-  font-family: 'Nanum Pen Script', cursive;
-  font-size: 23px;
-  font-weight: 400;
-  color: #23305e;
-  transform: rotate(-14deg) translateY(-1px);
-  letter-spacing: -0.04em;
+/* 담당(신청인): 급하게 갈긴 볼펜 사인 */
+.approval__scribble {
+  width: 38px;
+  height: 19px;
+  transform: rotate(-6deg);
+  opacity: 0.9;
 }
 
 /* 심사역: 빨간 막도장 (원형 인장) */
