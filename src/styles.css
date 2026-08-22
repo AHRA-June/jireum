@@ -1,0 +1,386 @@
+/* ── 지름신 심사기: 관공서 서류 톤 ─────────────────────────── */
+:root {
+  --ink: #1f2937;
+  --ink-soft: #6b7280;
+  --paper: #f7f5f0;
+  --sheet: #fffdf8;
+  --line: #d6d3cb;
+  --blue: #1d4ed8;
+  --orange: #ea580c;
+  --red: #dc2626;
+  --gray: #4b5563;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.screen {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px calc(32px + env(safe-area-inset-bottom));
+  min-height: 100dvh;
+}
+
+.screen--center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* ── 입력 화면 ── */
+.doc-header {
+  text-align: center;
+  border: 2px solid var(--ink);
+  background: var(--sheet);
+  padding: 16px 12px 14px;
+  margin-bottom: 20px;
+}
+
+.doc-header__office {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: var(--ink-soft);
+}
+
+.doc-header__title {
+  margin: 6px 0 8px;
+  font-size: 24px;
+  letter-spacing: 0.15em;
+}
+
+.doc-header__subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field__label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.field__input {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  background: var(--sheet);
+  color: var(--ink);
+  outline: none;
+}
+
+.field__input:focus {
+  border-color: var(--blue);
+}
+
+.field__price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.field__unit {
+  font-size: 15px;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.options__chip {
+  font-size: 14px;
+  padding: 9px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--sheet);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.options__chip--selected {
+  border-color: var(--blue);
+  background: #e8effc;
+  color: var(--blue);
+  font-weight: 700;
+}
+
+.submit {
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--blue);
+  color: #fff;
+  cursor: pointer;
+}
+
+.submit:disabled {
+  background: var(--line);
+  color: var(--ink-soft);
+  cursor: default;
+}
+
+.submit--ghost {
+  background: transparent;
+  color: var(--blue);
+  border: 1.5px solid var(--blue);
+}
+
+.fine-print {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* ── 심사 중 화면 ── */
+.papers {
+  position: relative;
+  width: 96px;
+  height: 120px;
+  margin-bottom: 28px;
+}
+
+.papers__sheet {
+  position: absolute;
+  inset: 0;
+  background: var(--sheet);
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transform-origin: bottom center;
+}
+
+.papers__sheet::before,
+.papers__sheet::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  height: 4px;
+  background: var(--line);
+  border-radius: 2px;
+}
+
+.papers__sheet::before { top: 22px; }
+.papers__sheet::after { top: 36px; box-shadow: 0 14px 0 var(--line), 0 28px 0 var(--line); }
+
+.papers__sheet--1 { animation: flip 1.6s infinite ease-in-out; }
+.papers__sheet--2 { animation: flip 1.6s 0.25s infinite ease-in-out; }
+.papers__sheet--3 { animation: flip 1.6s 0.5s infinite ease-in-out; }
+
+@keyframes flip {
+  0%, 55%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg) translateY(-8px); }
+}
+
+.reviewing__title {
+  margin: 0 0 16px;
+  font-size: 22px;
+  letter-spacing: 0.2em;
+}
+
+.reviewing__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reviewing__step {
+  font-size: 13px;
+  color: var(--ink-soft);
+  opacity: 0;
+  animation: step-in 0.4s forwards;
+}
+
+.reviewing__step::after {
+  content: ' … 완료';
+  color: var(--blue);
+}
+
+@keyframes step-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 판정서 화면 ── */
+.doc {
+  background: var(--sheet);
+  border: 2px solid var(--ink);
+  padding: 20px 16px;
+  position: relative;
+}
+
+.doc__head {
+  text-align: center;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+
+.doc__office {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: var(--ink-soft);
+}
+
+.doc__title {
+  margin: 6px 0;
+  font-size: 24px;
+  letter-spacing: 0.2em;
+}
+
+.doc__number {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.doc__table {
+  margin: 0;
+  border: 1px solid var(--line);
+}
+
+.doc__row {
+  display: flex;
+  border-bottom: 1px solid var(--line);
+}
+
+.doc__row:last-child {
+  border-bottom: 0;
+}
+
+.doc__row dt {
+  flex: 0 0 96px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #efece5;
+  border-right: 1px solid var(--line);
+}
+
+.doc__row dd {
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.doc__score-note {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.doc__stamp-area {
+  display: flex;
+  justify-content: center;
+  padding: 22px 0 6px;
+}
+
+.stamp {
+  display: inline-block;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  padding: 12px 20px 12px calc(20px + 0.25em);
+  border: 4px double currentColor;
+  border-radius: 10px;
+  transform: rotate(-8deg);
+  animation: stamp-slam 0.45s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+  animation-delay: 0.35s;
+}
+
+.stamp--blue { color: var(--blue); }
+.stamp--orange { color: var(--orange); }
+.stamp--red { color: var(--red); }
+.stamp--gray { color: var(--gray); }
+
+@keyframes stamp-slam {
+  0% { opacity: 0; transform: rotate(-8deg) scale(2.4); }
+  70% { opacity: 1; transform: rotate(-8deg) scale(0.94); }
+  100% { opacity: 1; transform: rotate(-8deg) scale(1); }
+}
+
+.doc__reason {
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+  margin-top: 8px;
+}
+
+.doc__reason-title {
+  margin: 0 0 6px;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+}
+
+.doc__reason p {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.doc__note {
+  color: var(--ink-soft);
+  font-size: 13px !important;
+}
+
+.doc__foot {
+  margin-top: 16px;
+  border-top: 2px solid var(--ink);
+  padding-top: 10px;
+  text-align: center;
+}
+
+.doc__signature {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
