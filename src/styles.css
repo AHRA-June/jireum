@@ -557,23 +557,23 @@ body {
 /* ── 홈 화면: 결재판 ── */
 .board {
   position: relative;
-  width: min(78vw, 300px);
-  aspect-ratio: 3 / 4.1;
+  width: min(76vw, 292px);
+  aspect-ratio: 3 / 4.15;
   padding: 0;
   border: 0;
-  border-radius: 10px;
+  border-radius: 6px 12px 12px 6px;
   cursor: pointer;
-  /* 짙은 감색 가죽 */
+  /* 검정 비닐가죽 */
   background:
-    radial-gradient(circle at 30% 22%, rgba(255, 255, 255, 0.09), transparent 55%),
-    radial-gradient(circle at 72% 85%, rgba(0, 0, 0, 0.35), transparent 60%),
-    repeating-radial-gradient(circle at 48% 40%, transparent 0 2px, rgba(0, 0, 0, 0.12) 2px 3px),
-    linear-gradient(160deg, #232c46, #161d33 55%, #10152a 100%);
-  background-color: #161d33;
+    radial-gradient(circle at 32% 18%, rgba(255, 255, 255, 0.08), transparent 50%),
+    radial-gradient(circle at 75% 90%, rgba(0, 0, 0, 0.5), transparent 60%),
+    repeating-radial-gradient(circle at 45% 42%, transparent 0 2px, rgba(255, 255, 255, 0.015) 2px 3px),
+    linear-gradient(155deg, #2e2c2a, #201f1d 50%, #171614 100%);
+  background-color: #201f1d;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.5),
-    0 18px 34px -16px rgba(20, 20, 30, 0.75);
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset -2px -3px 8px rgba(0, 0, 0, 0.55),
+    0 16px 30px -14px rgba(15, 14, 12, 0.8);
   animation: board-in 0.5s ease-out both;
 }
 
@@ -586,108 +586,108 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* 상단 금속 클립 */
-.board__clip {
+/* 왼쪽 제본 등(스파인): 세로 홈 두 줄 */
+.board__spine {
   position: absolute;
-  top: -14px;
+  top: 6px;
+  bottom: 6px;
+  left: 13px;
+  width: 5px;
+  border-left: 1.5px solid rgba(0, 0, 0, 0.55);
+  border-right: 1.5px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 6px 0 0 -4.5px rgba(0, 0, 0, 0.45), 7px 0 0 -4.5px rgba(255, 255, 255, 0.05);
+}
+
+/* 금박 압인 문구 */
+.board__emboss {
+  position: absolute;
+  top: 19%;
   left: 50%;
   transform: translateX(-50%);
-  width: 92px;
-  height: 30px;
-  border-radius: 7px 7px 4px 4px;
-  background: linear-gradient(180deg, #f3ecd8 0%, #c9bd97 30%, #a3945f 55%, #d8cda5 80%, #8f8150 100%);
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.7),
-    0 3px 5px rgba(0, 0, 0, 0.4);
-}
-
-.board__clip::after {
-  content: '';
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 12px;
-  height: 5px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #6d6138, #b3a672);
-}
-
-/* 금박 압인 테두리 */
-.board__frame {
-  position: absolute;
-  inset: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0;
-  border: 1.5px solid rgba(214, 197, 138, 0.75);
-  border-radius: 6px;
-  box-shadow:
-    inset 0 0 0 3.5px transparent,
-    inset 0 0 0 4.5px rgba(214, 197, 138, 0.35);
-}
-
-.board__office {
-  font-family: var(--serif);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.5em;
-  text-indent: 0.5em;
-  color: #cbbd85;
-  margin-bottom: 22px;
-}
-
-/* 금박 인장: 원형 테두리 속 決裁 */
-.board__seal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 92px;
-  height: 92px;
-  border: 2px solid #d6c58a;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 2.5px transparent, inset 0 0 0 3.5px rgba(214, 197, 138, 0.45);
+  gap: 10px;
   font-family: var(--serif);
   font-weight: 900;
-  font-size: 34px;
-  letter-spacing: 0.12em;
-  text-indent: 0.12em;
-  color: #d6c58a;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6), 0 -1px 0 rgba(255, 246, 214, 0.25);
-  margin-bottom: 18px;
-}
-
-.board__title {
-  font-family: var(--serif);
-  font-weight: 900;
-  font-size: 27px;
-  letter-spacing: 0.6em;
-  text-indent: 0.6em;
-  color: #e6d7a3;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.65), 0 -1px 0 rgba(255, 246, 214, 0.22);
-}
-
-.board__desc {
-  margin-top: 20px;
-  font-size: 11.5px;
-  line-height: 1.7;
-  letter-spacing: 0.04em;
-  color: rgba(203, 189, 133, 0.8);
-  word-break: keep-all;
-}
-
-.board__open {
-  margin-top: 24px;
-  font-size: 12px;
+  font-size: 30px;
+  line-height: 1.45;
   letter-spacing: 0.14em;
-  color: rgba(230, 215, 163, 0.95);
-  border-bottom: 1px solid rgba(214, 197, 138, 0.5);
-  padding-bottom: 3px;
+  text-indent: 0.14em;
+  white-space: nowrap;
+  color: #d9b95c;
+  background: linear-gradient(178deg, #f0d98a 8%, #cfa845 45%, #f2e2a0 62%, #b8923a 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8));
+}
+
+/* 문구 위아래 장식 괘선 */
+.board__rule {
+  display: block;
+  width: 108px;
+  height: 5px;
+  border-top: 1.5px solid #d9b95c;
+  border-bottom: 1.5px solid #d9b95c;
+}
+
+/* 우하단 명찰 카드 */
+.board__label {
+  position: absolute;
+  right: 11%;
+  bottom: 9%;
+  width: 47%;
+  display: flex;
+  flex-direction: column;
+  background: #fbfaf6;
+  border-radius: 3px;
+  padding: 9px 10px 8px;
+  gap: 7px;
+  box-shadow:
+    inset 0 0 0 3px rgba(0, 0, 0, 0.08),
+    0 2px 5px rgba(0, 0, 0, 0.5);
+  text-align: left;
+}
+
+.board__label-row {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.board__label-key {
+  font-size: 8.5px;
+  letter-spacing: 0.04em;
+  color: #9a958a;
+  flex-shrink: 0;
+}
+
+.board__label-value {
+  flex: 1;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #43403a;
+  border-bottom: 1px solid #d8d4ca;
+  padding-bottom: 2px;
+  white-space: nowrap;
+}
+
+.board__label-value--blank {
+  min-height: 12px;
+}
+
+.board__hint {
+  margin: 26px 0 0;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: var(--ink-soft);
   animation: open-blink 1.8s ease-in-out infinite;
 }
 
 @keyframes open-blink {
-  0%, 100% { opacity: 0.95; }
-  50% { opacity: 0.45; }
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.35; }
 }
