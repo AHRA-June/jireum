@@ -135,12 +135,8 @@ export async function renderVerdictImage(
   ctx.textBaseline = 'middle';
   const roles = ['담당', '심사역', '지름신'];
   roles.forEach((role, i) => {
-    ctx.fillText(role, aX + cellW * i + cellW / 2 - (i === 2 ? 14 : 0), aY + headH / 2 + 1);
+    ctx.fillText(role, aX + cellW * i + cellW / 2, aY + headH / 2 + 1);
   });
-  // 지름신은 전결권자
-  ctx.font = `400 14px ${GOTHIC}`;
-  ctx.fillStyle = INK_SOFT;
-  ctx.fillText('전결', aX + cellW * 2.5 + 32, aY + headH / 2 + 1);
   // 담당: 필기체 이름 또는 휘갈긴 사인
   const signCy = aY + headH + signH / 2;
   if (signerName) {

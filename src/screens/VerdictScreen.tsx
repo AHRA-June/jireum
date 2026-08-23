@@ -137,9 +137,7 @@ export default function VerdictScreen({ rules, input, verdict, onRetry, archived
               </span>
             </div>
             <div className="approval__cell">
-              <span className="approval__role">
-                지름신<em className="approval__delegate">전결</em>
-              </span>
+              <span className="approval__role">지름신</span>
               <span className="approval__sign">
                 {jireumsinApproved(verdict) ? (
                   <span className="approval__dojang approval__dojang--jireumsin">지름</span>

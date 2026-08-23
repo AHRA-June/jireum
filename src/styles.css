@@ -951,17 +951,6 @@ body {
   color: #23305e;
 }
 
-/* 지름신 전결 표기 */
-.approval__delegate {
-  display: block;
-  font-style: normal;
-  font-family: var(--gothic);
-  font-size: 8px;
-  letter-spacing: 0;
-  color: var(--ink-soft);
-  margin-top: -2px;
-}
-
 /* 지름신 결재 도장 */
 .approval__dojang--jireumsin {
   width: 28px;
