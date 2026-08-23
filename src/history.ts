@@ -50,9 +50,11 @@ export function addHistory(
       input,
       verdict,
     };
-    // 같은 문서번호가 이미 있으면 중복 기록하지 않는다 (재렌더 대비)
-    const next = [entry, ...loadHistory().filter((e) => e.docNumber !== entry.docNumber)];
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(next.slice(0, MAX_ENTRIES)));
+    // 같은 판정이 재렌더로 두 번 기록되는 것만 막는다.
+    // (문서번호는 랜덤이라 드물게 겹칠 수 있는데, 그때 옛 기록을 지우면 안 된다)
+    const history = loadHistory();
+    if (history[0]?.docNumber === entry.docNumber) return;
+    localStorage.setItem(HISTORY_KEY, JSON.stringify([entry, ...history].slice(0, MAX_ENTRIES)));
   } catch {
     // 저장 불가 환경 — 이력은 부가 기능이므로 조용히 무시
   }

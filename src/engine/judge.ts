@@ -64,8 +64,10 @@ export function gradeOf(rules: JireumRules, score: number): VerdictGrade {
   return 'reject';
 }
 
-function formatDocNumber(format: string, random: () => number): string {
-  return format.replace('{random4}', String(Math.floor(random() * 10000)).padStart(4, '0'));
+function formatDocNumber(format: string, random: () => number, date: Date): string {
+  return format
+    .replace('{year}', String(date.getFullYear()))
+    .replace('{random4}', String(Math.floor(random() * 10000)).padStart(4, '0'));
 }
 
 function pick<T>(pool: T[], random: () => number): T {
@@ -90,8 +92,9 @@ export function judge(
   now: () => Date = () => new Date(),
 ): JireumVerdict {
   const score = calcScore(rules, input);
-  const issuedAt = formatIssuedAt(now());
-  const docNumber = formatDocNumber(rules.meta.docNumberFormat, random);
+  const issuedDate = now();
+  const issuedAt = formatIssuedAt(issuedDate);
+  const docNumber = formatDocNumber(rules.meta.docNumberFormat, random, issuedDate);
   const notes = rules.triggers
     .filter((t) => evalCondition(t.condition, input))
     .map((t) => t.note);

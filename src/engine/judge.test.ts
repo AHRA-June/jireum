@@ -134,3 +134,20 @@ describe('evalCondition', () => {
     expect(() => evalCondition('price ~= 3', input({}))).toThrow();
   });
 });
+
+describe('문서번호', () => {
+  const at = (iso: string) => () => new Date(iso);
+
+  it('연도는 심사한 날짜에서 온다', () => {
+    const v = judge(rules, input({}), () => 0.5, at('2027-03-04T10:00:00'));
+    expect(v.docNumber).toBe('제2027-지름-5000호');
+  });
+
+  it('뒤 4자리는 매번 새로 뽑힌다', () => {
+    const a = judge(rules, input({}), () => 0.1234, at('2026-08-23T10:00:00'));
+    const b = judge(rules, input({}), () => 0.9876, at('2026-08-23T10:00:00'));
+    expect(a.docNumber).not.toBe(b.docNumber);
+    expect(a.docNumber).toMatch(/^제2026-지름-\d{4}호$/);
+    expect(b.docNumber).toMatch(/^제2026-지름-\d{4}호$/);
+  });
+});
