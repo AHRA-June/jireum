@@ -44,12 +44,16 @@ export type OgVariant = 'approve' | 'conditional' | 'reject' | 'decided';
 
 /**
  * 링크 미리보기에 뜰 판정 이미지 주소.
- * 도메인을 박아두면 QR 테스트 환경(private-web)과 운영(web)이 갈려 404가 나므로,
- * 지금 이 번들이 서빙되고 있는 origin을 그대로 쓴다.
+ *
+ * 미리보기는 메신저 서버가 이 URL을 바깥에서 직접 긁어가야 뜬다. 그래서
+ * 외부에 열려 있지 않은 주소(콘솔 QR 테스트용 private-web, 로컬 개발)를 넘기면
+ * 이미지를 못 받아 카드가 통째로 비어 버린다 — 기본 이미지만도 못하다.
+ * 확실히 공개된 운영 도메인일 때만 지정하고, 그 외에는 넘기지 않는다.
  */
 function ogImageUrl(variant: OgVariant): string | undefined {
   const origin = window.location.origin;
-  if (!origin.startsWith('https://')) return undefined; // 로컬 개발 등 외부에서 못 여는 주소
+  const isPublic = /^https:\/\/[^.]+\.web\.tossmini\.com$/.test(origin);
+  if (!isPublic) return undefined;
   return `${origin}/og/${variant}.png`;
 }
 

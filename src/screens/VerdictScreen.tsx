@@ -12,6 +12,7 @@ interface Props {
   input: JireumInput;
   verdict: JireumVerdict;
   onRetry: () => void;
+  onHistory: () => void;
   /** 결재 대장에서 열람 중이면 true — 이력을 다시 쌓지 않는다 */
   archived?: boolean;
 }
@@ -65,7 +66,7 @@ function buildShareMessage(input: JireumInput, verdict: JireumVerdict, link: str
 
 type PendingAction = 'share' | 'save' | 'edit' | null;
 
-export default function VerdictScreen({ rules, input, verdict, onRetry, archived = false }: Props) {
+export default function VerdictScreen({ rules, input, verdict, onRetry, onHistory, archived = false }: Props) {
   const [signer, setSigner] = useState<string | null>(loadSigner);
   const [pending, setPending] = useState<PendingAction>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -232,6 +233,11 @@ export default function VerdictScreen({ rules, input, verdict, onRetry, archived
         <button className="submit submit--ghost" type="button" onClick={onRetry}>
           {archived ? '결재 대장으로' : '다른 건 심사받기'}
         </button>
+        {!archived && (
+          <button className="submit submit--ghost" type="button" onClick={onHistory}>
+            결재 대장 보기
+          </button>
+        )}
       </div>
 
       {toast && <p className="toast">{toast}</p>}

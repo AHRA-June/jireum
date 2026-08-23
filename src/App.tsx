@@ -70,6 +70,7 @@ export default function App() {
           verdict={phase.verdict}
           archived={phase.archived}
           onRetry={phase.archived ? () => setPhase({ name: 'history' }) : handleRetry}
+          onHistory={() => setPhase({ name: 'history' })}
         />
       );
   }
