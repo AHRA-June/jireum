@@ -44,6 +44,25 @@ Disallow: /
 User-agent: Amazonbot
 Disallow: /
 
-# 일반 검색엔진 포함 전체 색인 차단
+# 카카오톡·메신저 링크 미리보기 크롤러: 판정 이미지(/og/)만 허용
+# — 이걸 막으면 공유 링크에 승인/부결 이미지가 뜨지 않는다
+User-agent: kakaotalk-scrap
+Allow: /og/
+Disallow: /
+
+User-agent: facebookexternalhit
+Allow: /og/
+Disallow: /
+
+User-agent: Twitterbot
+Allow: /og/
+Disallow: /
+
+User-agent: Slackbot-LinkExpanding
+Allow: /og/
+Disallow: /
+
+# 일반 검색엔진 포함 전체 색인 차단 (미리보기 이미지는 예외)
 User-agent: *
+Allow: /og/
 Disallow: /

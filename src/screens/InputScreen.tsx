@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import type { JireumInput, JireumRules } from '../engine/types';
 import OptionGroup from '../components/OptionGroup';
+import SignModal from '../components/SignModal';
+import { loadSigner, storeSigner } from '../signer';
 
 interface Props {
   rules: JireumRules;
@@ -18,6 +20,8 @@ export default function InputScreen({ rules, onSubmit }: Props) {
   const [frequency, setFrequency] = useState<string | null>(null);
   const [deliberation, setDeliberation] = useState<string | null>(null);
   const [necessity, setNecessity] = useState<string | null>(null);
+  const [signer, setSigner] = useState<string | null>(loadSigner);
+  const [signing, setSigning] = useState(false);
 
   // 선택지 목록도 배점표(JSON)에서 그대로 가져온다.
   const options = useMemo(
@@ -45,6 +49,18 @@ export default function InputScreen({ rules, onSubmit }: Props) {
             대출 심사 모형(CSS)을 만들던 사람이 이제 당신의 지름을 심사합니다.
           </p>
         </header>
+
+        {/* 기안자 — 눌러서 서명(이름)을 넣거나 고친다 */}
+        <div className="drafter">
+          <span className="drafter__key">기안자</span>
+          <button className="drafter__value" type="button" onClick={() => setSigning(true)}>
+            {signer ? (
+              <span className="drafter__name">{signer}</span>
+            ) : (
+              <span className="drafter__blank">서명하기</span>
+            )}
+          </button>
+        </div>
 
         <form
           className="form"
@@ -113,6 +129,21 @@ export default function InputScreen({ rules, onSubmit }: Props) {
         <p className="fine-print">{rules.meta.disclaimer}</p>
         </form>
       </article>
+
+      {signing && (
+        <SignModal
+          initialName={signer}
+          editOnly
+          onCancel={() => setSigning(false)}
+          onConfirm={(name) => {
+            setSigning(false);
+            if (name) {
+              setSigner(name);
+              storeSigner(name);
+            }
+          }}
+        />
+      )}
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { JireumInput, JireumRules, JireumVerdict } from '../engine/types';
 import { createShareLink, logEvent, saveVerdictImage, shareVerdict, shareVerdictImage } from '../toss/bridge';
+import type { OgVariant } from '../toss/bridge';
 import { renderVerdictImage } from '../share/verdictImage';
 import SignModal from '../components/SignModal';
 import { loadSigner, storeSigner } from '../signer';
@@ -36,21 +37,33 @@ function jireumsinApproved(verdict: JireumVerdict): boolean {
   );
 }
 
+/** 링크 미리보기 이미지 종류 — 판정 등급에 맞춘다 */
+function ogVariant(verdict: JireumVerdict): OgVariant {
+  if (verdict.specialKey === 'already_decided') return 'decided';
+  if (verdict.specialKey === 'instant_approve') return 'approve';
+  switch (verdict.grade) {
+    case 'approve': return 'approve';
+    case 'conditional': return 'conditional';
+    default: return 'reject';
+  }
+}
+
+/** 받는 사람이 "나는 뭐 받았게?"로 읽도록 판정을 앞세운다 */
 function buildShareMessage(input: JireumInput, verdict: JireumVerdict, link: string | null): string {
   return [
+    `내 ${input.item}, ${verdict.stamp} 났다.`,
     `[지름결의서] ${verdict.docNumber}`,
-    `신청 품목: ${input.item} (${input.price.toLocaleString('ko-KR')}원)`,
-    `판정: ${verdict.stamp} (${verdict.score}점)`,
+    `신청 금액 ${input.price.toLocaleString('ko-KR')}원 · 심사 점수 ${verdict.score}점`,
     verdict.reason,
     '',
-    '너도 심사받아 봐',
+    '너도 심사받아 봐 👉',
     link ?? '',
   ]
     .filter(Boolean)
     .join('\n');
 }
 
-type PendingAction = 'share' | 'save' | null;
+type PendingAction = 'share' | 'save' | 'edit' | null;
 
 export default function VerdictScreen({ rules, input, verdict, onRetry, archived = false }: Props) {
   const [signer, setSigner] = useState<string | null>(loadSigner);
@@ -76,7 +89,7 @@ export default function VerdictScreen({ rules, input, verdict, onRetry, archived
       const dataUrl = await renderVerdictImage(rules, input, verdict, tone, name, jireumsinApproved(verdict));
       if (action === 'share') {
         logEvent('jireum_share', { stamp: verdict.stamp });
-        const link = await createShareLink();
+        const link = await createShareLink(ogVariant(verdict));
         const message = buildShareMessage(input, verdict, link);
         // 1순위: 이미지 + 문구를 함께 공유 시트로
         if (await shareVerdictImage(dataUrl, message)) return;
@@ -103,11 +116,17 @@ export default function VerdictScreen({ rules, input, verdict, onRetry, archived
   return (
     <main className="screen">
       <article className={`sheet doc doc--${tone}`}>
-        <div className="approval" aria-hidden="true">
+        <div className="approval">
           <div className="approval__table">
             <div className="approval__cell">
-              <span className="approval__role">담당</span>
-              <span className="approval__sign">
+              <span className="approval__role" aria-hidden="true">담당</span>
+              {/* 서명을 눌러 이름을 고칠 수 있다 */}
+              <button
+                className="approval__sign approval__sign--editable"
+                type="button"
+                onClick={() => setPending('edit')}
+                aria-label={signer ? `담당 서명: ${signer} (눌러서 수정)` : '담당 서명하기'}
+              >
                 {signer ? (
                   <span
                     className="approval__name"
@@ -128,15 +147,15 @@ export default function VerdictScreen({ rules, input, verdict, onRetry, archived
                     />
                   </svg>
                 )}
-              </span>
+              </button>
             </div>
-            <div className="approval__cell">
+            <div className="approval__cell" aria-hidden="true">
               <span className="approval__role">심사역</span>
               <span className="approval__sign">
                 <span className="approval__dojang">심</span>
               </span>
             </div>
-            <div className="approval__cell">
+            <div className="approval__cell" aria-hidden="true">
               <span className="approval__role">지름신</span>
               <span className="approval__sign">
                 {jireumsinApproved(verdict) ? (
@@ -219,14 +238,21 @@ export default function VerdictScreen({ rules, input, verdict, onRetry, archived
 
       {pending !== null && (
         <SignModal
+          initialName={signer}
+          editOnly={pending === 'edit'}
           onCancel={() => setPending(null)}
           onConfirm={(name) => {
+            const action = pending;
             setPending(null);
             if (name) {
               setSigner(name);
               storeSigner(name);
             }
-            void runAction(pending, name);
+            if (action === 'edit') {
+              showToast(name ? '서명을 수정했어요.' : '서명을 지웠어요.');
+              return;
+            }
+            void runAction(action, name);
           }}
         />
       )}

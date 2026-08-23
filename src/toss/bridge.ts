@@ -40,10 +40,22 @@ export function logEvent(name: string, params: Record<string, string | number> =
   }
 }
 
-/** 토스 앱에서 이 미니앱을 열 수 있는 공유 링크를 만든다. 실패하면 null. */
-export async function createShareLink(): Promise<string | null> {
+/** 카톡 링크 미리보기에 뜰 판정 이미지 — 서비스 도메인에 정적으로 올라간다. */
+const OG_BASE = 'https://jireumform.web.tossmini.com/og';
+
+export type OgVariant = 'approve' | 'conditional' | 'reject' | 'decided';
+
+/**
+ * 토스 앱에서 이 미니앱을 열 수 있는 공유 링크를 만든다.
+ * `variant`에 맞는 판정 이미지를 미리보기로 지정해, 링크만 전달돼도
+ * 상대방이 승인/부결을 바로 본다. 실패하면 null.
+ */
+export async function createShareLink(variant: OgVariant): Promise<string | null> {
   try {
-    const link = await Share.createLink({ path: 'intoss://jireumform' });
+    const link = await Share.createLink({
+      path: 'intoss://jireumform',
+      ogImageUrl: `${OG_BASE}/${variant}.png`,
+    });
     return link ?? null;
   } catch {
     return null;

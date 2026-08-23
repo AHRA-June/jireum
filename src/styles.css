@@ -1117,3 +1117,60 @@ body {
   font-size: 12px;
   color: var(--ink-soft);
 }
+
+/* 판정서 담당 칸: 눌러서 서명 수정 */
+.approval__sign--editable {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  width: 100%;
+}
+
+.approval__sign--editable:active {
+  background: var(--sheet-deep);
+}
+
+/* 신청서 기안자 줄 */
+.drafter {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: -6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.drafter__key {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--ink-soft);
+}
+
+.drafter__value {
+  min-width: 82px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  padding: 2px 6px 3px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.drafter__name {
+  font-family: 'Nanum Pen Script', cursive;
+  font-size: 21px;
+  color: #23305e;
+  display: inline-block;
+  transform: rotate(-4deg);
+}
+
+.drafter__blank {
+  font-size: 12px;
+  color: #b8b09e;
+}
