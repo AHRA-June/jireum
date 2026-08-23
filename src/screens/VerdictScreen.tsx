@@ -21,6 +21,7 @@ interface Props {
 function stampTone(verdict: JireumVerdict): 'blue' | 'orange' | 'red' | 'gray' {
   if (verdict.specialKey === 'instant_approve') return 'blue';
   if (verdict.specialKey === 'already_decided') return 'gray';
+  if (verdict.specialKey === 'over_limit') return 'gray';
   switch (verdict.grade) {
     case 'approve': return 'blue';
     case 'conditional': return 'orange';
@@ -41,6 +42,7 @@ function jireumsinApproved(verdict: JireumVerdict): boolean {
 /** 링크 미리보기 이미지 종류 — 판정 등급에 맞춘다 */
 function ogVariant(verdict: JireumVerdict): OgVariant {
   if (verdict.specialKey === 'already_decided') return 'decided';
+  if (verdict.specialKey === 'over_limit') return 'overlimit';
   if (verdict.specialKey === 'instant_approve') return 'approve';
   switch (verdict.grade) {
     case 'approve': return 'approve';

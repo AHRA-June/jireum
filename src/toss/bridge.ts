@@ -40,7 +40,7 @@ export function logEvent(name: string, params: Record<string, string | number> =
   }
 }
 
-export type OgVariant = 'approve' | 'conditional' | 'reject' | 'decided';
+export type OgVariant = 'approve' | 'conditional' | 'reject' | 'decided' | 'overlimit';
 
 /**
  * 링크 미리보기에 뜰 판정 이미지 주소.

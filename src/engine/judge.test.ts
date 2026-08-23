@@ -5,6 +5,13 @@ import type { JireumInput, JireumRules } from './types';
 
 const rules = rulesJson as JireumRules;
 
+/** 규칙은 key로 찾는다 — 배열 순서가 바뀌어도 테스트가 깨지지 않게 */
+function specialRule(key: string) {
+  const rule = rules.specialRules.find((r) => r.key === key);
+  if (!rule) throw new Error(`특수 규칙 없음: ${key}`);
+  return rule;
+}
+
 function input(partial: Partial<JireumInput>): JireumInput {
   return {
     item: '테스트 품목',
@@ -81,7 +88,7 @@ describe('특수 규칙 — 점수 무시하고 전용 문구', () => {
     expect(v.specialKey).toBe('instant_approve');
     expect(v.grade).toBeNull();
     expect(v.stamp).toBe('즉시 승인');
-    expect(v.reason).toBe(rules.specialRules[0].reason);
+    expect(v.reason).toBe(specialRule('instant_approve').reason);
   });
 
   it('10001원 + 첫 지름은 특수 규칙 미적용', () => {
@@ -97,7 +104,7 @@ describe('특수 규칙 — 점수 무시하고 전용 문구', () => {
     );
     expect(v.specialKey).toBe('already_decided');
     expect(v.stamp).toBe('심사 무의미');
-    expect(v.reason).toBe(rules.specialRules[1].reason);
+    expect(v.reason).toBe(specialRule('already_decided').reason);
   });
 });
 
@@ -149,5 +156,35 @@ describe('문서번호', () => {
     expect(a.docNumber).not.toBe(b.docNumber);
     expect(a.docNumber).toMatch(/^제2026-지름-\d{4}호$/);
     expect(b.docNumber).toMatch(/^제2026-지름-\d{4}호$/);
+  });
+});
+
+describe('고액 특수 규칙 — 전결 권한 초과', () => {
+  it('300만원 초과는 점수와 무관하게 권한 초과 판정', () => {
+    // 점수만 보면 60점(조건부 승인)이 나오는 조합
+    const v = judge(
+      rules,
+      input({
+        item: '차',
+        price: 35000000,
+        frequency: '1번째',
+        deliberation: '한 달 이상',
+        necessity: '일상에 지장',
+      }),
+    );
+    expect(v.specialKey).toBe('over_limit');
+    expect(v.stamp).toBe('권한 초과');
+    expect(v.grade).toBeNull();
+  });
+
+  it('300만원 정확히는 통상 심사', () => {
+    const v = judge(rules, input({ price: 3000000 }));
+    expect(v.specialKey).toBeNull();
+  });
+
+  it('300만원 초과는 즉시 승인보다 우선한다', () => {
+    // 만원 이하 + 첫 지름이라도 금액이 크면 성립할 수 없으므로, 규칙 순서만 확인
+    const v = judge(rules, input({ price: 3000001, frequency: '1번째' }));
+    expect(v.specialKey).toBe('over_limit');
   });
 });

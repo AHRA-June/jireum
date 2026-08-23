@@ -60,6 +60,12 @@
   },
   "specialRules": [
     {
+      "key": "over_limit",
+      "condition": "price>3000000",
+      "stamp": "권한 초과",
+      "reason": "본 위원회의 전결 권한은 300만원까지입니다. 이 건은 배우자 또는 부모님의 결재를 받으시기 바랍니다."
+    },
+    {
       "key": "instant_approve",
       "condition": "price<=10000 && frequency=='1번째'",
       "stamp": "즉시 승인",
