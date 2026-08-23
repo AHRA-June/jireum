@@ -19,7 +19,7 @@ type Phase =
   | { name: 'history' }
   | { name: 'input' }
   | { name: 'reviewing' }
-  | { name: 'verdict'; input: JireumInput; verdict: JireumVerdict };
+  | { name: 'verdict'; input: JireumInput; verdict: JireumVerdict; archived?: boolean };
 
 export default function App() {
   const [phase, setPhase] = useState<Phase>({ name: 'home' });
@@ -48,14 +48,29 @@ export default function App() {
         />
       );
     case 'history':
-      return <HistoryScreen onBack={() => setPhase({ name: 'home' })} />;
+      return (
+        <HistoryScreen
+          onBack={() => setPhase({ name: 'home' })}
+          onOpen={(entry) => {
+            if (entry.input && entry.verdict) {
+              setPhase({ name: 'verdict', input: entry.input, verdict: entry.verdict, archived: true });
+            }
+          }}
+        />
+      );
     case 'input':
       return <InputScreen rules={rules} onSubmit={handleSubmit} />;
     case 'reviewing':
       return <ReviewingScreen />;
     case 'verdict':
       return (
-        <VerdictScreen rules={rules} input={phase.input} verdict={phase.verdict} onRetry={handleRetry} />
+        <VerdictScreen
+          rules={rules}
+          input={phase.input}
+          verdict={phase.verdict}
+          archived={phase.archived}
+          onRetry={phase.archived ? () => setPhase({ name: 'history' }) : handleRetry}
+        />
       );
   }
 }

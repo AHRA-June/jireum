@@ -1090,3 +1090,41 @@ body {
   text-underline-offset: 3px;
   cursor: pointer;
 }
+
+/* 결재 대장 항목: 버튼이지만 표 행처럼 보이게 */
+.ledger__row {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-bottom: 1px solid var(--line-soft);
+  background: transparent;
+  font-family: inherit;
+  color: inherit;
+  padding: 11px 2px;
+  cursor: pointer;
+}
+
+.ledger__row:active {
+  background: var(--sheet-deep);
+}
+
+.ledger__row:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.ledger__main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ledger__meta {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}

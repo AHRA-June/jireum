@@ -15,6 +15,9 @@ export interface HistoryEntry {
   tone: 'blue' | 'orange' | 'red' | 'gray';
   /** 정렬용 타임스탬프 */
   ts: number;
+  /** 판정서를 그대로 다시 열기 위한 원본 (구버전 기록에는 없을 수 있음) */
+  input?: JireumInput;
+  verdict?: JireumVerdict;
 }
 
 export function loadHistory(): HistoryEntry[] {
@@ -44,6 +47,8 @@ export function addHistory(
       issuedAt: verdict.issuedAt,
       tone,
       ts: Date.now(),
+      input,
+      verdict,
     };
     // 같은 문서번호가 이미 있으면 중복 기록하지 않는다 (재렌더 대비)
     const next = [entry, ...loadHistory().filter((e) => e.docNumber !== entry.docNumber)];

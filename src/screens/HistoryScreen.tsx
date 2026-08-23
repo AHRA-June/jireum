@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { clearHistory, historySummary, loadHistory } from '../history';
+import type { HistoryEntry } from '../history';
 
 interface Props {
   onBack: () => void;
+  onOpen: (entry: HistoryEntry) => void;
 }
 
 /** 결재 대장 — 지난 판정 이력 목록 */
-export default function HistoryScreen({ onBack }: Props) {
+export default function HistoryScreen({ onBack, onOpen }: Props) {
   const [entries, setEntries] = useState(loadHistory);
   const summary = historySummary(entries);
 
@@ -18,7 +20,9 @@ export default function HistoryScreen({ onBack }: Props) {
           <p className="doc-header__office">지름 심사 위원회</p>
           <h1 className="doc-header__title">결재 대장</h1>
           <hr className="doc-header__rule" />
-          <p className="doc-header__subtitle">지금까지 상신하신 결의서 내역입니다.</p>
+          <p className="doc-header__subtitle">
+            지금까지 상신하신 결의서 내역입니다. 항목을 누르면 판정서를 다시 볼 수 있어요.
+          </p>
         </header>
 
         <dl className="ledger-summary">
@@ -41,16 +45,23 @@ export default function HistoryScreen({ onBack }: Props) {
         ) : (
           <ul className="ledger">
             {entries.map((entry) => (
-              <li key={entry.docNumber} className="ledger__row">
-                <div className="ledger__main">
-                  <span className="ledger__item">{entry.item}</span>
-                  <span className={`ledger__stamp ledger__stamp--${entry.tone}`}>{entry.stamp}</span>
-                </div>
-                <div className="ledger__meta">
-                  <span>{entry.price.toLocaleString('ko-KR')}원</span>
-                  <span>{entry.score}점</span>
-                  <span>{entry.issuedAt}</span>
-                </div>
+              <li key={entry.docNumber}>
+                <button
+                  className="ledger__row"
+                  type="button"
+                  disabled={entry.verdict == null}
+                  onClick={() => onOpen(entry)}
+                >
+                  <span className="ledger__main">
+                    <span className="ledger__item">{entry.item}</span>
+                    <span className={`ledger__stamp ledger__stamp--${entry.tone}`}>{entry.stamp}</span>
+                  </span>
+                  <span className="ledger__meta">
+                    <span>{entry.price.toLocaleString('ko-KR')}원</span>
+                    <span>{entry.score}점</span>
+                    <span>{entry.issuedAt}</span>
+                  </span>
+                </button>
               </li>
             ))}
           </ul>

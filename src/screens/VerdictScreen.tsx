@@ -11,6 +11,8 @@ interface Props {
   input: JireumInput;
   verdict: JireumVerdict;
   onRetry: () => void;
+  /** 결재 대장에서 열람 중이면 true — 이력을 다시 쌓지 않는다 */
+  archived?: boolean;
 }
 
 /** 도장 색: 승인=청색 / 조건부=주황 / 부결=적색, 특수 판정은 규칙별 지정 */
@@ -50,17 +52,17 @@ function buildShareMessage(input: JireumInput, verdict: JireumVerdict, link: str
 
 type PendingAction = 'share' | 'save' | null;
 
-export default function VerdictScreen({ rules, input, verdict, onRetry }: Props) {
+export default function VerdictScreen({ rules, input, verdict, onRetry, archived = false }: Props) {
   const [signer, setSigner] = useState<string | null>(loadSigner);
   const [pending, setPending] = useState<PendingAction>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const tone = stampTone(verdict);
 
-  // 판정이 나오면 결재 대장에 기록한다
+  // 새 판정만 결재 대장에 기록한다 (대장에서 다시 열어본 건은 제외)
   useEffect(() => {
-    addHistory(input, verdict, tone);
-  }, [input, verdict, tone]);
+    if (!archived) addHistory(input, verdict, tone);
+  }, [input, verdict, tone, archived]);
 
   const showToast = (message: string) => {
     setToast(message);
@@ -211,7 +213,7 @@ export default function VerdictScreen({ rules, input, verdict, onRetry }: Props)
           이미지로 저장
         </button>
         <button className="submit submit--ghost" type="button" onClick={onRetry}>
-          다른 건 심사받기
+          {archived ? '결재 대장으로' : '다른 건 심사받기'}
         </button>
       </div>
 
