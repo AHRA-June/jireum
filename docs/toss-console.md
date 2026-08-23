@@ -27,6 +27,8 @@
 - 서비스 도메인: `https://jireumform.web.tossmini.com`
 - QR 테스트 도메인: `https://jireumform.private-web.tossmini.com`
 - 배포: 콘솔에서 API 키 발급 → `npx ait token add` → `npm run build && npm run deploy`
+- 마지막 배포 deploymentId: `01a02c41-2492-7eca-91c8-9f4337edd548`
+- API 키는 한 번 노출된 적이 있으므로 콘솔에서 재발급 권장 (저장소에는 저장돼 있지 않음)
 
 ## 유의사항
 
