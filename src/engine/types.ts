@@ -71,4 +71,6 @@ export interface JireumVerdict {
   notes: string[];
   score: number;
   docNumber: string;
+  /** 판정서 발행일자 (예: "2026. 08. 23.") */
+  issuedAt: string;
 }

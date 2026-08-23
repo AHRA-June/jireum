@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { JireumInput, JireumRules, JireumVerdict } from '../engine/types';
-import { logEvent, saveVerdictImage, shareVerdict, shareVerdictImage } from '../toss/bridge';
+import { createShareLink, logEvent, saveVerdictImage, shareVerdict, shareVerdictImage } from '../toss/bridge';
 import { renderVerdictImage } from '../share/verdictImage';
 import SignModal from '../components/SignModal';
 import { loadSigner, storeSigner } from '../signer';
+import { addHistory } from '../history';
 
 interface Props {
   rules: JireumRules;
@@ -24,7 +25,16 @@ function stampTone(verdict: JireumVerdict): 'blue' | 'orange' | 'red' | 'gray' {
   }
 }
 
-function buildShareMessage(input: JireumInput, verdict: JireumVerdict): string {
+/** 지름신은 승인 건에만 결재한다 (조건부·부결은 미결재로 남음) */
+function jireumsinApproved(verdict: JireumVerdict): boolean {
+  return (
+    verdict.grade === 'approve' ||
+    verdict.specialKey === 'instant_approve' ||
+    verdict.specialKey === 'already_decided'
+  );
+}
+
+function buildShareMessage(input: JireumInput, verdict: JireumVerdict, link: string | null): string {
   return [
     `[지름결의서] ${verdict.docNumber}`,
     `신청 품목: ${input.item} (${input.price.toLocaleString('ko-KR')}원)`,
@@ -32,7 +42,10 @@ function buildShareMessage(input: JireumInput, verdict: JireumVerdict): string {
     verdict.reason,
     '',
     '너도 심사받아 봐',
-  ].join('\n');
+    link ?? '',
+  ]
+    .filter(Boolean)
+    .join('\n');
 }
 
 type PendingAction = 'share' | 'save' | null;
@@ -44,6 +57,11 @@ export default function VerdictScreen({ rules, input, verdict, onRetry }: Props)
   const [busy, setBusy] = useState(false);
   const tone = stampTone(verdict);
 
+  // 판정이 나오면 결재 대장에 기록한다
+  useEffect(() => {
+    addHistory(input, verdict, tone);
+  }, [input, verdict, tone]);
+
   const showToast = (message: string) => {
     setToast(message);
     window.setTimeout(() => setToast(null), 2500);
@@ -53,15 +71,15 @@ export default function VerdictScreen({ rules, input, verdict, onRetry }: Props)
     if (busy) return;
     setBusy(true);
     try {
-      const dataUrl = await renderVerdictImage(rules, input, verdict, tone, name);
+      const dataUrl = await renderVerdictImage(rules, input, verdict, tone, name, jireumsinApproved(verdict));
       if (action === 'share') {
         logEvent('jireum_share', { stamp: verdict.stamp });
-        if (await shareVerdictImage(dataUrl, buildShareMessage(input, verdict))) return;
-        // 이미지 공유가 안 되는 환경: 앨범 저장 후 안내, 텍스트 공유 시트라도 연다
-        if (await saveVerdictImage(dataUrl, `jireum-${verdict.docNumber}.png`)) {
-          showToast('판정서 이미지를 저장했어요. 사진으로 공유해 주세요.');
-        }
-        await shareVerdict(buildShareMessage(input, verdict));
+        const link = await createShareLink();
+        const message = buildShareMessage(input, verdict, link);
+        // 1순위: 이미지 + 문구를 함께 공유 시트로
+        if (await shareVerdictImage(dataUrl, message)) return;
+        // 2순위: 이미지 첨부가 불가능한 환경 — 문구+링크만 보낸다 (앨범 저장 강요하지 않음)
+        await shareVerdict(message);
       } else {
         logEvent('jireum_save', { stamp: verdict.stamp });
         const ok = await saveVerdictImage(dataUrl, `jireum-${verdict.docNumber}.png`);
@@ -117,8 +135,16 @@ export default function VerdictScreen({ rules, input, verdict, onRetry }: Props)
               </span>
             </div>
             <div className="approval__cell">
-              <span className="approval__role">지름신</span>
-              <span className="approval__sign">－</span>
+              <span className="approval__role">
+                지름신<em className="approval__delegate">전결</em>
+              </span>
+              <span className="approval__sign">
+                {jireumsinApproved(verdict) ? (
+                  <span className="approval__dojang approval__dojang--jireumsin">지름</span>
+                ) : (
+                  '－'
+                )}
+              </span>
             </div>
           </div>
         </div>
@@ -136,6 +162,10 @@ export default function VerdictScreen({ rules, input, verdict, onRetry }: Props)
           <div className="doc__row">
             <dt>신청 금액</dt>
             <dd>{input.price.toLocaleString('ko-KR')}원</dd>
+          </div>
+          <div className="doc__row">
+            <dt>심사 일자</dt>
+            <dd>{verdict.issuedAt}</dd>
           </div>
           <div className="doc__row">
             <dt>심사 점수</dt>

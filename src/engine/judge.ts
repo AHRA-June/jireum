@@ -72,6 +72,13 @@ function pick<T>(pool: T[], random: () => number): T {
   return pool[Math.floor(random() * pool.length)];
 }
 
+/** 공문서식 날짜: 2026. 08. 23. */
+export function formatIssuedAt(date: Date): string {
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}. ${mm}. ${dd}.`;
+}
+
 /**
  * 판정 파이프라인: 특수 규칙 우선 → 점수 계산 → 등급 → 사유 랜덤 + 트리거 문구.
  * `random`은 테스트 주입용 (기본 Math.random).
@@ -80,8 +87,10 @@ export function judge(
   rules: JireumRules,
   input: JireumInput,
   random: () => number = Math.random,
+  now: () => Date = () => new Date(),
 ): JireumVerdict {
   const score = calcScore(rules, input);
+  const issuedAt = formatIssuedAt(now());
   const docNumber = formatDocNumber(rules.meta.docNumberFormat, random);
   const notes = rules.triggers
     .filter((t) => evalCondition(t.condition, input))
@@ -97,6 +106,7 @@ export function judge(
       notes,
       score,
       docNumber,
+      issuedAt,
     };
   }
 
@@ -110,5 +120,6 @@ export function judge(
     notes,
     score,
     docNumber,
+    issuedAt,
   };
 }

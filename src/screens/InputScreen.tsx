@@ -106,6 +106,7 @@ export default function InputScreen({ rules, onSubmit }: Props) {
           onChange={setNecessity}
         />
 
+        <p className="form-oath">위 금액을 영수(청구)합니다.</p>
         <button className="submit" type="submit" disabled={!ready}>
           결재 상신
         </button>

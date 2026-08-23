@@ -950,3 +950,143 @@ body {
   font-size: 13px;
   color: #23305e;
 }
+
+/* 지름신 전결 표기 */
+.approval__delegate {
+  display: block;
+  font-style: normal;
+  font-family: var(--gothic);
+  font-size: 8px;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+  margin-top: -2px;
+}
+
+/* 지름신 결재 도장 */
+.approval__dojang--jireumsin {
+  width: 28px;
+  height: 28px;
+  font-size: 10px;
+  letter-spacing: -0.03em;
+  transform: rotate(-6deg);
+}
+
+/* 신청서 하단 선서 문구 */
+.form-oath {
+  margin: 2px 0 -6px;
+  text-align: center;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+/* ── 결재 대장 ── */
+.ledger-summary {
+  display: flex;
+  margin: 0 0 16px;
+  border: 1px solid var(--ink);
+}
+
+.ledger-summary__cell {
+  flex: 1;
+  text-align: center;
+  padding: 9px 4px;
+  border-left: 1px solid var(--line);
+}
+
+.ledger-summary__cell:first-child {
+  border-left: 0;
+}
+
+.ledger-summary__cell dt {
+  font-family: var(--serif);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+
+.ledger-summary__cell dd {
+  margin: 3px 0 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--ink);
+}
+
+.ledger__row {
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.ledger__main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ledger__item {
+  font-size: 15px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ledger__stamp {
+  flex-shrink: 0;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 3px 7px;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+}
+
+.ledger__stamp--blue { color: var(--navy); }
+.ledger__stamp--orange { color: var(--orange); }
+.ledger__stamp--red { color: var(--red); }
+.ledger__stamp--gray { color: var(--gray); }
+
+.ledger__meta {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.ledger__meta span:nth-child(2)::before,
+.ledger__meta span:nth-child(3)::before {
+  content: '· ';
+}
+
+.ledger-empty {
+  margin: 24px 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* 홈: 결재 대장 진입 */
+.board__ledger {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: 0;
+  background: transparent;
+  font-family: var(--gothic);
+  font-size: 12.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}

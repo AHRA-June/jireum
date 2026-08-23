@@ -1,17 +1,20 @@
 import { useRef, useState } from 'react';
 import { triggerHaptic } from '../toss/bridge';
 import { loadSigner } from '../signer';
+import { loadHistory } from '../history';
 
 interface Props {
   onStart: () => void;
+  onHistory: () => void;
 }
 
 /** 표지가 다 젖혀지기 전에 화면을 전환하면 뚝 끊겨 보여서, 애니메이션 길이와 맞춘다. */
 const OPEN_MS = 600;
 
 /** 홈 화면 — 사무실의 그 검정 결재판. 열면(탭하면) 신청서가 나온다. */
-export default function HomeScreen({ onStart }: Props) {
+export default function HomeScreen({ onStart, onHistory }: Props) {
   const [opening, setOpening] = useState(false);
+  const historyCount = loadHistory().length;
   // 판정서에서 한 번 서명했다면 결재판 명찰에도 이름이 채워진다
   const signer = loadSigner();
   const startedRef = useRef(false);
@@ -60,6 +63,11 @@ export default function HomeScreen({ onStart }: Props) {
         </button>
       </div>
       <p className={`board__hint${opening ? ' board__hint--hidden' : ''}`}>눌러서 결의서 작성</p>
+      {historyCount > 0 && !opening && (
+        <button className="board__ledger" type="button" onClick={onHistory}>
+          결재 대장 ({historyCount}건)
+        </button>
+      )}
       <p className="fine-print">본 판정은 법적 효력이 없으며, 지름은 본인 책임입니다.</p>
     </main>
   );

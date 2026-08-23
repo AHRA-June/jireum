@@ -75,6 +75,7 @@ export async function renderVerdictImage(
   verdict: JireumVerdict,
   tone: 'blue' | 'orange' | 'red' | 'gray',
   signerName: string | null,
+  jireumsinApproved: boolean,
 ): Promise<string> {
   // 폰트가 로드되기 전에 그리면 폴백 글꼴로 박제된다
   await Promise.all([
@@ -134,8 +135,12 @@ export async function renderVerdictImage(
   ctx.textBaseline = 'middle';
   const roles = ['담당', '심사역', '지름신'];
   roles.forEach((role, i) => {
-    ctx.fillText(role, aX + cellW * i + cellW / 2, aY + headH / 2 + 1);
+    ctx.fillText(role, aX + cellW * i + cellW / 2 - (i === 2 ? 14 : 0), aY + headH / 2 + 1);
   });
+  // 지름신은 전결권자
+  ctx.font = `400 14px ${GOTHIC}`;
+  ctx.fillStyle = INK_SOFT;
+  ctx.fillText('전결', aX + cellW * 2.5 + 32, aY + headH / 2 + 1);
   // 담당: 필기체 이름 또는 휘갈긴 사인
   const signCy = aY + headH + signH / 2;
   if (signerName) {
@@ -163,10 +168,26 @@ export async function renderVerdictImage(
   ctx.fillStyle = RED;
   ctx.fillText('심', 0, 2);
   ctx.restore();
-  // 지름신: 미결재
-  ctx.font = `700 26px ${SERIF}`;
-  ctx.fillStyle = INK;
-  ctx.fillText('－', aX + cellW * 2.5, signCy);
+  // 지름신: 승인 건에만 결재 도장
+  if (jireumsinApproved) {
+    ctx.save();
+    ctx.translate(aX + cellW * 2.5, signCy);
+    ctx.rotate((-6 * Math.PI) / 180);
+    ctx.strokeStyle = RED;
+    ctx.lineWidth = 3;
+    ctx.globalAlpha = 0.85;
+    ctx.beginPath();
+    ctx.arc(0, 0, 28, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.font = `700 20px ${SERIF}`;
+    ctx.fillStyle = RED;
+    ctx.fillText('지름', 0, 2);
+    ctx.restore();
+  } else {
+    ctx.font = `700 26px ${SERIF}`;
+    ctx.fillStyle = INK;
+    ctx.fillText('－', aX + cellW * 2.5, signCy);
+  }
 
   // ── 헤더 ──
   ctx.textAlign = 'center';
@@ -199,11 +220,12 @@ export async function renderVerdictImage(
   const tX = 90;
   const tY = 540;
   const tW = W - 180;
-  const rowH = 86;
+  const rowH = 72;
   const labelW = 250;
   const rows: [string, string][] = [
     ['신청 품목', input.item],
     ['신청 금액', `${input.price.toLocaleString('ko-KR')}원`],
+    ['심사 일자', verdict.issuedAt],
     [
       '심사 점수',
       `${verdict.score}점 / 100점${verdict.specialKey !== null ? ' (점수 미반영)' : ''}`,
@@ -237,7 +259,7 @@ export async function renderVerdictImage(
     ctx.fillText(label, tX + labelW / 2 + 2, y + rowH / 2 + 1);
     ctx.letterSpacing = '0px';
     ctx.textAlign = 'left';
-    ctx.font = `400 31px ${GOTHIC}`;
+    ctx.font = `400 29px ${GOTHIC}`;
     let display = value;
     while (ctx.measureText(display).width > tW - labelW - 60 && display.length > 1) {
       display = `${display.slice(0, -2)}…`;

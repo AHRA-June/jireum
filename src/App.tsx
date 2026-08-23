@@ -4,6 +4,7 @@ import { judge } from './engine/judge';
 import type { JireumInput, JireumRules, JireumVerdict } from './engine/types';
 import { logEvent, triggerHaptic } from './toss/bridge';
 import HomeScreen from './screens/HomeScreen';
+import HistoryScreen from './screens/HistoryScreen';
 import InputScreen from './screens/InputScreen';
 import ReviewingScreen from './screens/ReviewingScreen';
 import VerdictScreen from './screens/VerdictScreen';
@@ -15,6 +16,7 @@ const REVIEWING_MS = 2500;
 
 type Phase =
   | { name: 'home' }
+  | { name: 'history' }
   | { name: 'input' }
   | { name: 'reviewing' }
   | { name: 'verdict'; input: JireumInput; verdict: JireumVerdict };
@@ -39,7 +41,14 @@ export default function App() {
 
   switch (phase.name) {
     case 'home':
-      return <HomeScreen onStart={() => setPhase({ name: 'input' })} />;
+      return (
+        <HomeScreen
+          onStart={() => setPhase({ name: 'input' })}
+          onHistory={() => setPhase({ name: 'history' })}
+        />
+      );
+    case 'history':
+      return <HistoryScreen onBack={() => setPhase({ name: 'home' })} />;
     case 'input':
       return <InputScreen rules={rules} onSubmit={handleSubmit} />;
     case 'reviewing':

@@ -40,6 +40,16 @@ export function logEvent(name: string, params: Record<string, string | number> =
   }
 }
 
+/** 토스 앱에서 이 미니앱을 열 수 있는 공유 링크를 만든다. 실패하면 null. */
+export async function createShareLink(): Promise<string | null> {
+  try {
+    const link = await Share.createLink({ path: 'intoss://jireumform' });
+    return link ?? null;
+  } catch {
+    return null;
+  }
+}
+
 /** 판정서 PNG를 앨범(기기)에 저장한다. 토스 밖에서는 다운로드로 폴백. */
 export async function saveVerdictImage(dataUrl: string, fileName: string): Promise<boolean> {
   const base64 = dataUrl.split(',')[1];
